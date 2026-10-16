@@ -53,6 +53,45 @@ table{width:100%;border-collapse:collapse;font-size:.75rem}th,td{padding:8px 6px
 .note,small{font-size:.78rem;color:var(--mut)}.note{margin-top:16px}
 .back{display:inline-block;margin-top:12px;color:#fff}
 @media (prefers-reduced-motion:reduce){.glass{transition:none}}
+
+button.on{background:linear-gradient(90deg,#4d7dff,#9a62ff);border-color:transparent}
+.tabs{display:flex;gap:6px;margin:14px 0 4px;overflow-x:auto}.tabs button{flex:1;white-space:nowrap;padding:8px 10px;font-size:13px}
+.tp{display:none}.tp.on{display:block}
+.lrow{border:1px solid var(--ln);background:rgba(255,255,255,.07);border-radius:16px;padding:12px;margin:10px 0}
+.lh{display:flex;align-items:center;gap:8px;margin-bottom:8px}.grip{cursor:grab;color:var(--mut);font-size:18px;padding:0 6px;user-select:none}
+.acts{margin-left:auto;display:flex;gap:4px}.acts button{padding:5px 11px}
+.lrow input{width:100%;margin:3px 0}
+.icp{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}.icp button{width:40px;height:40px;padding:0;display:grid;place-items:center;border-radius:12px}
+.icp svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.icp img{width:22px;height:22px;border-radius:5px}
+.add{width:100%;border-style:dashed;margin-top:4px}
+.themes{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:10px 0}.th{padding:0;border-radius:14px;overflow:hidden;text-align:left}.th i{display:block;height:56px}.th span{display:block;padding:6px 10px;font-size:13px}
+.savebar{position:sticky;bottom:0;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:14px 0 4px;margin-top:14px;background:linear-gradient(transparent,rgba(10,8,30,.8) 35%)}
+#sv{background:linear-gradient(90deg,#4d7dff,#9a62ff);border-color:transparent;font-weight:600}
+a.link .ic.im{width:26px;height:26px;border-radius:7px;object-fit:cover}
+#lf{display:flex;gap:8px;margin:12px 0 4px}
+body:not([data-theme=glass]) .arc{display:none}
+body[data-theme=sunset] .arcs{background:linear-gradient(160deg,#ff7e5f,#feb47b 45%,#b24592)}
+body[data-theme=ocean] .arcs{background:linear-gradient(160deg,#001d3d,#0077b6 55%,#00b4d8)}
+body[data-theme=forest] .arcs{background:linear-gradient(160deg,#04210f,#1b5e3a 55%,#7bc67e)}
+body[data-theme=neon] .arcs{background:#07070d}
+body[data-theme=paper] .arcs{background:#eceff7}
+body[data-theme=sunset] .brand{background:linear-gradient(90deg,#fff,#ffe1c8);-webkit-background-clip:text;background-clip:text}
+body[data-theme=ocean] .brand{background:linear-gradient(90deg,#fff,#bff3ff);-webkit-background-clip:text;background-clip:text}
+body[data-theme=forest] .brand{background:linear-gradient(90deg,#fff,#d6ffd0);-webkit-background-clip:text;background-clip:text}
+body[data-theme=neon]{--ac:#00f0ff}
+body[data-theme=neon] .glass{background:#0b0b16;border:1px solid #00f0ff;box-shadow:0 0 28px rgba(0,240,255,.35),inset 0 0 22px rgba(255,0,200,.08);-webkit-backdrop-filter:none;backdrop-filter:none}
+body[data-theme=neon] .brand{background:linear-gradient(90deg,#00f0ff,#ff2bd6);-webkit-background-clip:text;background-clip:text}
+body[data-theme=neon] a.link:hover{border-color:#00f0ff;background:rgba(0,240,255,.08);box-shadow:0 0 16px rgba(0,240,255,.4)}
+body[data-theme=neon] .savebar{background:linear-gradient(transparent,#0b0b16 35%)}
+body[data-theme=paper]{color:#1a1a2e;--mut:rgba(26,26,46,.6);--ln:rgba(0,0,0,.12);--ac:#4d7dff;color-scheme:light}
+body[data-theme=paper] .glass{background:#fff;border-color:#e2e5f0;box-shadow:0 20px 50px rgba(30,40,90,.15);-webkit-backdrop-filter:none;backdrop-filter:none}
+body[data-theme=paper] :is(a.link,.back,input,button){color:#1a1a2e}
+body[data-theme=paper] :is(input,button){background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.18)}
+body[data-theme=paper] a.link:hover{background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.15);box-shadow:none}
+body[data-theme=paper] :is(.card,.photo,.lrow){background:rgba(0,0,0,.04)}
+body[data-theme=paper] :is(#go,#pick,#sv,button.on){color:#fff;background:linear-gradient(90deg,#4d7dff,#9a62ff);border-color:transparent}
+body[data-theme=paper] .savebar{background:linear-gradient(transparent,#fff 35%)}
+body[data-theme=paper] .av-img{border-color:#d5d9ea}
 </style>
 </head>
 <body>
@@ -79,18 +118,35 @@ table{width:100%;border-collapse:collapse;font-size:.75rem}th,td{padding:8px 6px
     <input id="key" type="password" placeholder="Secret key"> <button id="go">Open</button>
   </div>
   <div id="stats" style="display:none">
-    <div class="photo">
-      <img class="av-img" alt="Your profile photo" width="68" height="68">
-      <div><b>Profile photo</b>
-        <div class="btnrow"><button id="pick" type="button">Upload photo</button><button id="reset" type="button">Reset</button></div>
-        <small id="pmsg">Changes show in this browser only.</small>
-        <input id="file" type="file" accept="image/*" hidden>
+    <div class="tabs" role="tablist"><button type="button" data-tab="ov" class="on">Overview</button><button type="button" data-tab="ed">Links</button><button type="button" data-tab="ds">Design</button><button type="button" data-tab="lg">Click log</button></div>
+    <div class="tp on" id="tp-ov">
+      <div class="grid" id="cards"></div>
+      <h2>Clicks per link</h2><div id="perlink"></div>
+      <h2>Last 7 days <small>(views / clicks)</small></h2><div class="days" id="days"></div>
+    </div>
+    <div class="tp" id="tp-ed">
+      <small>Drag ⋮⋮ or use the arrows to reorder. Tap <b>G</b> to pull the app icon from Google using the link address.</small>
+      <div id="ed"></div>
+      <button class="add" id="addl" type="button">+ Add link</button>
+      <input id="iconfile" type="file" accept="image/*" hidden>
+    </div>
+    <div class="tp" id="tp-ds">
+      <h2>Page design</h2><div class="themes" id="themes"></div>
+      <div class="photo">
+        <img class="av-img" alt="Your profile photo" width="68" height="68">
+        <div><b>Profile photo</b>
+          <div class="btnrow"><button id="pick" type="button">Upload photo</button><button id="reset" type="button">Reset</button></div>
+          <small id="pmsg">Changes show in this browser only.</small>
+          <input id="file" type="file" accept="image/*" hidden>
+        </div>
       </div>
     </div>
-    <div class="grid" id="cards"></div>
-    <h2>Clicks per link</h2><div id="perlink"></div>
-    <h2>Last 7 days <small>(views / clicks)</small></h2><div class="days" id="days"></div>
-    <h2>Recent visitors</h2><div style="overflow-x:auto"><table id="log"></table></div>
+    <div class="tp" id="tp-lg">
+      <div id="lf"><button type="button" data-f="all" class="on">All</button><button type="button" data-f="click">Clicks</button><button type="button" data-f="view">Views</button></div>
+      <small id="logn"></small>
+      <div style="overflow-x:auto;margin-top:8px"><table id="log"></table></div>
+    </div>
+    <div class="savebar" id="savebar" style="display:none"><button id="sv" type="button">💾 Save changes</button><button id="dis" type="button">Discard</button><button id="cp" type="button">Copy config</button><small id="svmsg"></small></div>
   </div>
   <div class="note" id="mode"></div>
   <a class="link back" href="#">← Back to page</a>
@@ -108,7 +164,7 @@ const ICONS = {
   facebook:'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>',
   twitter:'<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>'
 };
-const LINKS = [
+const DEFAULT_LINKS = [
   {id:"linkedin", name:"LinkedIn",  icon:"fa-linkedin",  url:"https://linkedin.com/in/mohammed-razi"},
   {id:"github",   name:"GitHub",    icon:"fa-github",    url:"https://github.com/Mohammedrazi"},
   {id:"instagram",name:"Instagram", icon:"fa-instagram", url:"https://instagram.com/mohammed_razi_me", app:"instagram://user?username=mohammed_razi_me"},
@@ -126,6 +182,14 @@ const store = {
 const uid = store.get("uid") || (()=>{const u=Math.random().toString(36).slice(2)+Date.now().toString(36);store.set("uid",u);return u})();
 const today = () => new Date().toISOString().slice(0,10);
 
+const DEFAULT_CFG = null; // paste a "Copy config" export here to make your edits permanent for every visitor
+const THEMES=[["glass","Glass","linear-gradient(135deg,#7a3cff,#1b3bd0)"],["sunset","Sunset","linear-gradient(135deg,#ff7e5f,#b24592)"],["ocean","Ocean","linear-gradient(135deg,#001d3d,#00b4d8)"],["forest","Forest","linear-gradient(135deg,#04210f,#7bc67e)"],["neon","Neon","linear-gradient(135deg,#07070d,#00f0ff 55%,#ff2bd6)"],["paper","Paper","linear-gradient(135deg,#fff,#dfe3f0)"]];
+ICONS.link='<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>';
+const norm=l=>({id:l.id,name:l.name||"",url:l.url||"",app:l.app||"",icon:l.icon&&l.icon.t?l.icon:{t:"svg",v:l.id}});
+let cfg=(()=>{const c=store.get("cfg")||DEFAULT_CFG||{};return {theme:THEMES.some(t=>t[0]===c.theme)?c.theme:"glass",links:(Array.isArray(c.links)?c.links:DEFAULT_LINKS).map(norm)}})();
+let LINKS=cfg.links;
+const applyTheme=t=>{document.body.dataset.theme=t};
+applyTheme(cfg.theme);
 const esc = x => String(x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let geo = {};
 const geoP = (async()=>{
@@ -161,14 +225,21 @@ function track(type, link){
   }
 }
 
+const iconHTML=l=>{const i=l.icon;
+  if(i.t==="google"){let d="";try{d=new URL(l.url).hostname}catch(e){} return `<img class="ic im" alt="" src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(d)}&sz=64">`}
+  if(i.t==="img") return `<img class="ic im" alt="" src="${esc(i.v)}">`;
+  return `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${ICONS[i.v]||ICONS.link}</svg>`};
+function drawLinks(){
+  $("#links").innerHTML = LINKS.map(l=>`<a class="link" href="${esc(l.url)}" data-id="${esc(l.id)}" target="_blank" rel="noopener">${iconHTML(l)}<span class="t">${esc(l.name)}</span><span class="sp"></span></a>`).join("");
+}
 function renderPage(){
-  $("#links").innerHTML = LINKS.map(l=>`<a class="link" href="${l.url}" data-id="${l.id}" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${ICONS[l.id]}</svg><span class="t">${l.name}</span><span class="sp"></span></a>`).join("");
+  drawLinks();
   $("#links").addEventListener("click",e=>{
     const a=e.target.closest("a.link"); if(!a) return;
     track("click",a.dataset.id);
     const l=LINKS.find(x=>x.id===a.dataset.id);
     // On phones, try opening the native app first; fall back to the web link
-    if(l.app && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+    if(l&&l.app && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
       e.preventDefault();
       const t=setTimeout(()=>{ if(!document.hidden) location.href=l.url; },900);
       document.addEventListener("visibilitychange",()=>clearTimeout(t),{once:true});
@@ -193,6 +264,13 @@ async function loadStats(key){
   return {views:views.length,uniques:new Set(views.map(v=>v.uid)).size,clicks:clicks.length,perLink,daily,local:true,recent:ev.slice(-50).reverse()};
 }
 
+let logFilter="all",recentEv=[];
+function drawLog(){
+  const list=recentEv.filter(r=>logFilter==="all"||r.type===logFilter);
+  const rows=list.map(r=>`<tr><td>${esc(new Date(r.t).toLocaleString())}</td><td>${r.type==="click"?"Click · "+esc((LINKS.find(l=>l.id===r.link)||{name:r.link}).name):"View"}</td><td>${esc(r.ip||"—")}</td><td>${esc(r.country||"—")}</td><td>${esc(r.device||"—")}</td></tr>`).join("");
+  $("#log").innerHTML=`<tr><th>Date &amp; time</th><th>Action</th><th>IP address</th><th>Country</th><th>Device</th></tr>`+(rows||`<tr><td colspan="5">No entries</td></tr>`);
+  $("#logn").textContent=list.length+" entries shown";
+}
 function renderStats(s){
   const ctr = s.views ? Math.round(s.clicks/s.views*100) : 0;
   $("#cards").innerHTML = [["Total views",s.views],["Unique visitors",s.uniques],["Total clicks",s.clicks],["Click rate",ctr+"%"]]
@@ -203,8 +281,7 @@ function renderStats(s){
   const dm = Math.max(1,...s.daily.map(d=>Math.max(d.views,d.clicks||0)));
   $("#days").innerHTML = s.daily.map(d=>`<div><span class="pair"><i style="height:${d.views/dm*80}px"></i><i class="c" style="height:${(d.clicks||0)/dm*80}px"></i></span>${d.views}/${d.clicks||0}<br>${d.date.slice(5)}</div>`).join("");
   $("#refresh").style.display="inline-block";
-  const rows=(s.recent||[]).map(r=>`<tr><td>${esc(new Date(r.t).toLocaleString())}</td><td>${r.type==="click"?"Click · "+esc((LINKS.find(l=>l.id===r.link)||{name:r.link}).name):"View"}</td><td>${esc(r.ip||"—")}</td><td>${esc(r.country||"—")}</td><td>${esc(r.device||"—")}</td></tr>`).join("");
-  $("#log").innerHTML=`<tr><th>Date &amp; time</th><th>Action</th><th>IP address</th><th>Country</th><th>Device</th></tr>`+(rows||`<tr><td colspan="5">No visits yet</td></tr>`);
+  recentEv=s.recent||[]; drawLog();
   $("#mode").textContent = s.local
     ? "Local mode: only counts visits from THIS browser. Add your Apps Script URL to count everyone."
     : "Live data from your Google Sheet.";
@@ -260,6 +337,87 @@ route();
     });
     st.addEventListener("mouseleave",()=>{card.style.setProperty("--rx","0deg");card.style.setProperty("--ry","0deg")});
   }
+})();
+</script>
+<script>
+(function(){
+const $$=s=>[...document.querySelectorAll(s)], clone=o=>JSON.parse(JSON.stringify(o));
+let draft=clone(cfg), up=-1;
+const msg=t=>{$("#svmsg").textContent=t}, mark=()=>msg("Unsaved changes");
+$$(".tabs button").forEach(b=>b.onclick=()=>{
+  $$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  $$(".tp").forEach(p=>p.classList.toggle("on",p.id==="tp-"+b.dataset.tab));
+  $("#savebar").style.display=/^(ed|ds)$/.test(b.dataset.tab)?"flex":"none";
+});
+const dom=u=>{try{return new URL(u).hostname}catch(e){return ""}};
+const fav=u=>`https://www.google.com/s2/favicons?domain=${encodeURIComponent(dom(u))}&sz=64`;
+function icp(l,i){
+  const c=(t,v)=>l.icon.t===t&&(v===undefined||l.icon.v===v)?"on":"";
+  return Object.keys(ICONS).map(k=>`<button type="button" class="${c("svg",k)}" data-i="${i}" data-t="svg" data-v="${k}" aria-label="${k} icon"><svg viewBox="0 0 24 24">${ICONS[k]}</svg></button>`).join("")
+   +`<button type="button" class="${c("google")}" data-i="${i}" data-t="google" aria-label="Google icon from link address"><img class="gi" alt="G" src="${fav(l.url)}"></button>`
+   +(l.icon.t==="img"?`<button type="button" class="on" data-i="${i}" data-t="keep" aria-label="Uploaded icon"><img alt="" src="${esc(l.icon.v)}"></button>`:"")
+   +`<button type="button" data-i="${i}" data-t="upload" aria-label="Upload icon" title="Upload your own">⬆</button>`;
+}
+function draw(){
+  const n=draft.links.length;
+  $("#ed").innerHTML=draft.links.map((l,i)=>`<div class="lrow" data-i="${i}">
+    <div class="lh"><span class="grip" draggable="true" data-i="${i}" title="Drag to reorder">⋮⋮</span><b>${i+1}</b>
+    <span class="acts"><button type="button" data-a="up" data-i="${i}" ${i?"":"disabled"} aria-label="Move up">↑</button><button type="button" data-a="down" data-i="${i}" ${i<n-1?"":"disabled"} aria-label="Move down">↓</button><button type="button" data-a="del" data-i="${i}" aria-label="Delete">🗑</button></span></div>
+    <input type="text" data-f="name" data-i="${i}" value="${esc(l.name)}" placeholder="Name">
+    <input type="text" data-f="url" data-i="${i}" value="${esc(l.url)}" placeholder="https://…" inputmode="url" autocapitalize="off">
+    <input type="text" data-f="app" data-i="${i}" value="${esc(l.app)}" placeholder="App link (optional) e.g. instagram://user?username=you" autocapitalize="off">
+    <div class="icp">${icp(l,i)}</div></div>`).join("");
+}
+const move=(i,j)=>{if(j<0||j>=draft.links.length||i===j)return;const [x]=draft.links.splice(i,1);draft.links.splice(j,0,x);draw();mark()};
+const ed=$("#ed");
+ed.addEventListener("input",e=>{
+  const t=e.target,f=t.dataset.f; if(!f) return;
+  draft.links[+t.dataset.i][f]=t.value; mark();
+  if(f==="url"){const g=t.closest(".lrow").querySelector(".gi"); if(g) g.src=fav(t.value)}
+});
+ed.addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  const i=+b.dataset.i, l=draft.links[i], a=b.dataset.a, t=b.dataset.t;
+  if(a==="up") move(i,i-1); else if(a==="down") move(i,i+1);
+  else if(a==="del"){ if(confirm("Delete this link?")){draft.links.splice(i,1);draw();mark()} }
+  else if(t==="svg"){l.icon={t:"svg",v:b.dataset.v};draw();mark()}
+  else if(t==="google"){l.icon={t:"google"};draw();mark()}
+  else if(t==="upload"){up=i;$("#iconfile").click()}
+});
+let from=-1;
+ed.addEventListener("dragstart",e=>{const g=e.target.closest(".grip"); if(!g) return; from=+g.dataset.i; e.dataTransfer.effectAllowed="move"; e.dataTransfer.setData("text/plain",String(from)); const r=g.closest(".lrow"); if(r) e.dataTransfer.setDragImage(r,20,20)});
+ed.addEventListener("dragover",e=>{if(from>=0&&e.target.closest(".lrow"))e.preventDefault()});
+ed.addEventListener("drop",e=>{const r=e.target.closest(".lrow"); if(!r||from<0) return; e.preventDefault(); const f=from; from=-1; move(f,+r.dataset.i)});
+ed.addEventListener("dragend",()=>{from=-1});
+$("#iconfile").onchange=e=>{
+  const f=e.target.files[0]; e.target.value=""; if(!f||!f.type.startsWith("image/")||up<0) return;
+  const im=new Image(), u=URL.createObjectURL(f), i=up;
+  im.onload=()=>{const s=Math.min(im.width,im.height),c=document.createElement("canvas");c.width=c.height=96;
+    c.getContext("2d").drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,96,96); URL.revokeObjectURL(u);
+    draft.links[i].icon={t:"img",v:c.toDataURL("image/png")}; draw(); mark()};
+  im.src=u;
+};
+$("#addl").onclick=()=>{draft.links.push({id:"l"+Date.now().toString(36),name:"New link",url:"https://",app:"",icon:{t:"google"}});draw();mark();ed.lastElementChild.scrollIntoView({block:"center"})};
+// themes
+$("#themes").innerHTML=THEMES.map(t=>`<button type="button" class="th" data-th="${t[0]}"><i style="background:${t[2]}"></i><span>${t[1]}</span></button>`).join("");
+const markTheme=()=>$$(".th").forEach(b=>b.classList.toggle("on",b.dataset.th===draft.theme));
+$("#themes").addEventListener("click",e=>{const b=e.target.closest(".th"); if(!b) return; draft.theme=b.dataset.th; applyTheme(draft.theme); markTheme(); mark()});
+// save / discard / export
+$("#sv").onclick=()=>{
+  draft.links.forEach(l=>{l.name=l.name.trim()||"Link";l.url=l.url.trim();if(l.url&&!/^[a-z][a-z0-9+.-]*:/i.test(l.url))l.url="https://"+l.url});
+  const next=clone(draft);
+  try{localStorage.setItem("cfg",JSON.stringify(next))}catch(e){msg("Could not save (storage full?). Try smaller icons.");return}
+  cfg=next; LINKS=cfg.links; if(rendered) drawLinks();
+  draft=clone(cfg); draw(); msg("Saved ✓");
+};
+$("#dis").onclick=()=>{draft=clone(cfg); applyTheme(cfg.theme); draw(); markTheme(); msg("Changes discarded")};
+$("#cp").onclick=async()=>{
+  const t=JSON.stringify(cfg);
+  try{await navigator.clipboard.writeText(t); msg("Copied. Paste into DEFAULT_CFG in the code to publish for everyone.")}catch(e){prompt("Copy this config:",t)}
+};
+// click log filter
+$$("#lf button").forEach(b=>b.onclick=()=>{logFilter=b.dataset.f;$$("#lf button").forEach(x=>x.classList.toggle("on",x===b));drawLog()});
+draw(); markTheme();
 })();
 </script>
 </body>
